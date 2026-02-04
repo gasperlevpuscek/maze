@@ -15,7 +15,8 @@ body {
 h1 {
     font-family: ': Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0 auto;
-    color: rgb(254, 236, 72);
+    color: rgb(219, 202, 44);
+    text-shadow: 2px 2px black;
 }
 
 .root {
