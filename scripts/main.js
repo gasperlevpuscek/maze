@@ -1,11 +1,11 @@
-var canvas, canvasContext,
+var canvas, canvasContext, img,
     playerX = 350,
     playerY = 10,
     playerW = 20,
     playerH = 20,
     playerSpeedX = 0,
     playerSpeedY = 0,
-    playerColor = "black",
+    playerColor = "red",
     backgroundColor = "white";
 
 
@@ -13,8 +13,12 @@ var canvas, canvasContext,
 window.onload = function () {
     canvas = document.getElementById('mazeCanvas');
     canvasContext = canvas.getContext('2d');
+    img = new Image();
+    img.src = "images/maze25.svg";
+
 
     setInterval(function () {
+
         playerMove();
         drawAll();
 
@@ -55,7 +59,6 @@ function keyPressed(evt) {
 }
 
 function keyReleased(evt) {
-    // console.log("Key pressed: "+evt.keyCode);
     if (evt.keyCode == KEY_A) {
         keyHeld_Left = false;
     }
@@ -111,6 +114,7 @@ function playerMove() {
 function drawAll() {
     colorRect(0, 0, canvas.width, canvas.height, backgroundColor);
     colorRect(playerX, playerY, playerW, playerH, playerColor);
+    canvasContext.drawImage(img, -3, -3, canvas.width + 6, canvas.height + 6);
 }
 
 function colorRect(leftX, topY, width, height, drawColor) {
