@@ -25,7 +25,7 @@ h1 {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: rgb(192, 192, 192);
+    background-color: rgb(125, 122, 122);
     align-items: center;
     justify-content: center;
     gap: 16px;
@@ -33,7 +33,7 @@ h1 {
 }
 
 canvas {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(135, 110, 55);
 }
 
 .mazeDiv {

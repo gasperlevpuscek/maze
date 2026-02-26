@@ -1,94 +1,114 @@
-let canvas;
-let ctx;
-let mazeImg;
-let collisionCanvas;
-let collisionCtx;
+var canvas = document.getElementById("mazeCanvas");
+var ctx = canvas.getContext("2d");
 
-const player = {
-    x: 0,
-    y: 0,
-    r: 10,
-    speed: 3
-};
+var maze = new Image();
+maze.src = "images/maze25.svg";
 
-const goal = {
-    x: 0,
-    y: 0,
-    r: 10
-};
+var ratImage = new Image();
+ratImage.src = "images/rat.png";
 
-let startTime = 0;
-let endTime = 0;
-let won = false;
+var cheeseImage = new Image();
+cheeseImage.src = "images/cheese.png";
 
-const key = { w: false, a: false, s: false, d: false };
+var collisionCanvas = document.createElement("canvas");
+collisionCanvas.width = canvas.width;
+collisionCanvas.height = canvas.height;
+var collisionCtx = collisionCanvas.getContext("2d");
 
-window.onload = function () {
-    canvas = document.getElementById('mazeCanvas');
-    ctx = canvas.getContext('2d');
+var playerX = 0;
+var playerY = 0;
+var playerSize = 10;
+var speed = 3;
 
-    collisionCanvas = document.createElement('canvas');
-    collisionCanvas.width = canvas.width;
-    collisionCanvas.height = canvas.height;
-    collisionCtx = collisionCanvas.getContext('2d', { willReadFrequently: true });
+var goalX = 0;
+var goalY = 0;
+var goalSize = 10;
 
-    mazeImg = new Image();
-    mazeImg.onload = function () {
-        buildCollisionLayer();
+var w = false;
+var a = false;
+var s = false;
+var d = false;
 
-        player.x = canvas.width / 2;
-        player.y = player.r;
-        while (hitsWall(player.x, player.y) && player.y < canvas.height - player.r) {
-            player.y += 1;
-        }
+var win = false;
 
-        goal.x = canvas.width / 2;
-        goal.y = canvas.height - goal.r;
-        while (hitsWall(goal.x, goal.y) && goal.y > goal.r) {
-            goal.y -= 1;
-        }
 
-        startTime = performance.now();
-        requestAnimationFrame(loop);
-    };
-    mazeImg.src = 'images/maze25.svg';
 
-    document.addEventListener('keydown', onDown);
-    document.addEventListener('keyup', onUp);
-};
+maze.onload = function () {
+    collisionCtx.fillStyle = "white";
+    collisionCtx.fillRect(0, 0, canvas.width, canvas.height);
+    collisionCtx.drawImage(maze, 0, 0, canvas.width, canvas.height);
 
-function onDown(e) {
-    const k = e.key.toLowerCase();
-    if (k in key) {
-        key[k] = true;
-        e.preventDefault();
+
+    playerX = canvas.width / 2;
+    playerY = playerSize;
+
+    while (isWall(playerX, playerY)) {
+        playerY++;
     }
-}
 
-function onUp(e) {
-    const k = e.key.toLowerCase();
-    if (k in key) {
-        key[k] = false;
-        e.preventDefault();
+    goalX = canvas.width / 2;
+    goalY = canvas.height - goalSize;
+
+    while (isWall(goalX, goalY)) {
+        goalY--;
     }
-}
+
+    requestAnimationFrame(loop);
+};
+
+
+
+document.addEventListener("keydown", function (e) {
+    if (e.key == "ArrowUp") w = true;
+    if (e.key == "ArrowLeft") a = true;
+    if (e.key == "ArrowDown") s = true;
+    if (e.key == "ArrowRight") d = true;
+});
+
+document.addEventListener("keyup", function (e) {
+    if (e.key == "ArrowUp") w = false;
+    if (e.key == "ArrowLeft") a = false;
+    if (e.key == "ArrowDown") s = false;
+    if (e.key == "ArrowRight") d = false;
+});
+
 
 function loop() {
-    if (!won) {
-        let dx = 0;
-        let dy = 0;
 
-        if (key.w) dy -= player.speed;
-        if (key.s) dy += player.speed;
-        if (key.a) dx -= player.speed;
-        if (key.d) dx += player.speed;
+    if (!win) {
 
-        tryMove(player.x + dx, player.y);
-        tryMove(player.x, player.y + dy);
+        if (w) {
+            if (!isWall(playerX, playerY - speed)) {
+                playerY -= speed;
+            }
+        }
 
-        if (squaresTouch(player, goal)) {
-            won = true;
-            endTime = performance.now();
+        if (s) {
+            if (!isWall(playerX, playerY + speed)) {
+                playerY += speed;
+            }
+        }
+
+        if (a) {
+            if (!isWall(playerX - speed, playerY)) {
+                playerX -= speed;
+            }
+        }
+
+        if (d) {
+            if (!isWall(playerX + speed, playerY)) {
+                playerX += speed;
+            }
+        }
+
+
+        if (
+            playerX - playerSize < goalX + goalSize &&
+            playerX + playerSize > goalX - goalSize &&
+            playerY - playerSize < goalY + goalSize &&
+            playerY + playerSize > goalY - goalSize
+        ) {
+            win = true;
         }
     }
 
@@ -96,73 +116,48 @@ function loop() {
     requestAnimationFrame(loop);
 }
 
-function tryMove(nextX, nextY) {
-    if (!hitsWall(nextX, nextY)) {
-        player.x = nextX;
-        player.y = nextY;
-    }
-}
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(mazeImg, -3, -3, canvas.width + 6, canvas.height + 6);
+    ctx.drawImage(maze, 0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = 'green';
-    ctx.fillRect(goal.x - goal.r, goal.y - goal.r, goal.r * 2, goal.r * 2);
+    ctx.drawImage(cheeseImage, goalX - goalSize, goalY - goalSize, goalSize * 2, goalSize * 2);
 
-    ctx.fillStyle = 'red';
-    ctx.fillRect(player.x - player.r, player.y - player.r, player.r * 2, player.r * 2);
+    ctx.drawImage(ratImage, playerX - playerSize, playerY - playerSize, playerSize * 2, playerSize * 2);
 
-    const timeMs = won ? (endTime - startTime) : (performance.now() - startTime);
-    const seconds = (timeMs / 1000).toFixed(1);
-    ctx.fillStyle = 'black';
-    ctx.font = '20px sans-serif';
-    ctx.fillText('Time: ' + seconds + 's', 15, 30);
-
-    if (won) {
-        ctx.font = '36px sans-serif';
-        ctx.fillStyle = 'blue';
-        ctx.textAlign = 'center';
-        ctx.fillText('You win!', canvas.width / 2, canvas.height / 2);
-        ctx.textAlign = 'start';
+    if (win) {
+        ctx.fillStyle = "yellow";
+        ctx.font = "36px Arial";
+        ctx.fillText("Win!", canvas.width / 2 - 80, canvas.height / 2);
     }
 }
 
-function squaresTouch(a, b) {
-    const aLeft = a.x - a.r;
-    const aRight = a.x + a.r;
-    const aTop = a.y - a.r;
-    const aBottom = a.y + a.r;
 
-    const bLeft = b.x - b.r;
-    const bRight = b.x + b.r;
-    const bTop = b.y - b.r;
-    const bBottom = b.y + b.r;
+function isWall(x, y) {
 
-    return aLeft < bRight && aRight > bLeft && aTop < bBottom && aBottom > bTop;
-}
-
-function buildCollisionLayer() {
-    collisionCtx.fillStyle = 'white';
-    collisionCtx.fillRect(0, 0, canvas.width, canvas.height);
-    collisionCtx.drawImage(mazeImg, -3, -3, canvas.width + 6, canvas.height + 6);
-}
-
-function hitsWall(x, y) {
-    if (x - player.r < 0 || y - player.r < 0 || x + player.r >= canvas.width || y + player.r >= canvas.height) {
+    if (
+        x - playerSize < 0 ||
+        y - playerSize < 0 ||
+        x + playerSize >= canvas.width ||
+        y + playerSize >= canvas.height
+    ) {
         return true;
     }
 
-    const points = [
+    var points = [
         [x, y],
-        [x + player.r, y],
-        [x - player.r, y],
-        [x, y + player.r],
-        [x, y - player.r]
+        [x + playerSize, y],
+        [x - playerSize, y],
+        [x, y + playerSize],
+        [x, y - playerSize]
     ];
 
-    for (const p of points) {
-        const pixel = collisionCtx.getImageData(Math.round(p[0]), Math.round(p[1]), 1, 1).data;
+    for (var i = 0; i < points.length; i++) {
+        var px = Math.round(points[i][0]);
+        var py = Math.round(points[i][1]);
+
+        var pixel = collisionCtx.getImageData(px, py, 1, 1).data;
+
         if (pixel[0] < 80 && pixel[1] < 80 && pixel[2] < 80) {
             return true;
         }
@@ -170,4 +165,3 @@ function hitsWall(x, y) {
 
     return false;
 }
-
