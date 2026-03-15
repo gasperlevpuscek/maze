@@ -50,6 +50,7 @@ window.onload = function () {
         mazeCollisionContext.clearRect(0, 0, canvas.width, canvas.height);
         mazeCollisionContext.drawImage(mazeBackground, 0, 0, canvas.width, canvas.height);
         spawnCheesesFromPolyline();
+        initCat();
 
         var framesPerSecond = 60;
         setInterval(function () {

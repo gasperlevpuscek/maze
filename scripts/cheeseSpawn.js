@@ -7,7 +7,6 @@ var MAZE_SOURCE_WIDTH = 404;
 var MAZE_SOURCE_HEIGHT = 404;
 var cheeses = [];
 var cheeseImage = new Image();
-var cheeseEatSound = new Audio('sounds/RatEatCheese.mp3');
 var cheesePanel;
 
 cheeseImage.src = 'images/cheese.png';
@@ -116,9 +115,8 @@ function collectCheesesNearPlayer(playerX, playerY, playerW, playerH) {
 
     if (cheeses.length < cheeseCountBefore) {
         updateCheesePanel();
-        cheeseEatSound.currentTime = 0;
-        cheeseEatSound.play().catch(function () {
-        });
+        cheeseEatSfx();
+        nom();
     }
 }
 

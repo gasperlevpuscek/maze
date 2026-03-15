@@ -1,13 +1,27 @@
 window.addEventListener("DOMContentLoaded", function () {
-    const audio = document.getElementById("bgMusic");
-    audio.volume = 0.2;
-
-    function startMusic() {
-        audio.play().catch(function () { });
-        document.removeEventListener("keydown", startMusic);
-        document.removeEventListener("click", startMusic);
-    }
-
-    document.addEventListener("keydown", startMusic);
-    document.addEventListener("click", startMusic);
+    backgroundMusic.volume = 0.2;
+    backgroundMusic.play();
 });
+
+const backgroundMusic = new Audio('sounds/ratEncounter.mp3');
+const cheeseEatSound = new Audio('sounds/RatEatCheese.mp3');
+const nomnomnom = new Audio('sounds/NomNomNom.mp3');
+const meow1 = new Audio('sounds/meow1.mp3'),
+    meow2 = new Audio('sounds/meow2.mp3'),
+    meow3 = new Audio('sounds/meow3.mp3');
+
+function cheeseEatSfx() {
+    cheeseEatSound.volume = 0.4;
+    cheeseEatSound.play();
+}
+
+function nom() {
+    nomnomnom.volume = 0.2
+    nomnomnom.play();
+
+}
+
+function meowSfx() {
+    meow3.volume = 0.5
+    meow3.play();
+}
