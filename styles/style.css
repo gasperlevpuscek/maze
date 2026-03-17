@@ -12,7 +12,6 @@ body {
     margin: 0;
     overflow-y: hidden;
     font-family: "Sour Gummy", sans-serif;
-
 }
 
 h1 {
@@ -36,7 +35,6 @@ h1 {
     margin: 0;
 }
 
-
 .mazeDiv {
     width: 100%;
     height: fit-content;
@@ -45,19 +43,22 @@ h1 {
     align-items: center;
 }
 
-.cheeseDiv {
+.cheeseSideDiv {
     position: absolute;
     right: 10%;
     top: 40%;
+    margin-top: 16px;
+    font-size: 30px;
+}
+
+.cheeseDiv {
     height: 220px;
     width: 220px;
-    background-color: white;
-    margin-top: 16px;
 }
 
 .cheesePanelImage {
-    width: 52px;
-    height: 52px;
+    width: 256px;
+    height: 256px;
     object-fit: contain;
     display: block;
     flex-shrink: 0;

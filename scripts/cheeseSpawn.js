@@ -1,6 +1,6 @@
 
 var CHEESE_SIZE = 20;
-var CHEESE_COUNT = 20;
+var CHEESE_COUNT = 7;
 var CHEESE_COLLECT_DISTANCE = 14;
 var DEFAULT_CANVAS_SIZE = 720;
 var MAZE_SOURCE_WIDTH = 404;
@@ -8,6 +8,24 @@ var MAZE_SOURCE_HEIGHT = 404;
 var cheeses = [];
 var cheeseImage = new Image();
 var cheesePanel;
+var cheeseWheel = [
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image()
+];
+
+cheeseWheel[0].src = 'images/cheeseImages/cheese1.png';
+cheeseWheel[1].src = 'images/cheeseImages/cheese2.png';
+cheeseWheel[2].src = 'images/cheeseImages/cheese3.png';
+cheeseWheel[3].src = 'images/cheeseImages/cheese4.png';
+cheeseWheel[4].src = 'images/cheeseImages/cheese5.png';
+cheeseWheel[5].src = 'images/cheeseImages/cheese6.png';
+cheeseWheel[6].src = 'images/cheeseImages/cheese7.png';
+
 
 cheeseImage.src = 'images/cheese.png';
 cheeseEatSound.preload = 'auto';
@@ -23,8 +41,9 @@ var cheesePointsOnMaze = "250,10 266,10 266,26 282,26 282,90 298,90 298,74 314,7
     });
 
 function updateCheesePanel() {
-    var cheeseIndex;
     var collectedCheeseCount;
+    var cheeseWheelIndex;
+    var cheesePanelImage;
 
     if (!cheesePanel) {
         cheesePanel = document.getElementById('cheeseDiv');
@@ -37,14 +56,16 @@ function updateCheesePanel() {
     collectedCheeseCount = CHEESE_COUNT - cheeses.length;
     cheesePanel.innerHTML = '';
 
-    for (cheeseIndex = 0; cheeseIndex < collectedCheeseCount; cheeseIndex++) {
-        var cheesePanelImage = document.createElement('img');
-
-        cheesePanelImage.className = 'cheesePanelImage';
-        cheesePanelImage.src = 'images/CheesePart.png';
-        cheesePanelImage.alt = 'Collected cheese';
-        cheesePanel.appendChild(cheesePanelImage);
+    if (collectedCheeseCount <= 0) {
+        return;
     }
+
+    cheeseWheelIndex = Math.min(collectedCheeseCount - 1, cheeseWheel.length - 1);
+    cheesePanelImage = document.createElement('img');
+    cheesePanelImage.className = 'cheesePanelImage';
+    cheesePanelImage.src = cheeseWheel[cheeseWheelIndex].src;
+    cheesePanel.appendChild(cheesePanelImage);
+
 }
 
 function spawnCheesesFromPolyline() {
