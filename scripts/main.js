@@ -143,6 +143,10 @@ function blockedInDirection(nextX, nextY, dirX, dirY) {
 }
 
 function playerMove() {
+    if (gameEnded) {
+        return;
+    }
+
     playerSpeedX = 0;
     playerSpeedY = 0;
 
@@ -210,12 +214,18 @@ function playerMove() {
         playerX = canvas.width - playerW;
     }
 
+    if (Math.abs(playerX - 425) <= 10 && Math.abs(playerY - 850) <= 10) {
+        ratWin();
+        return;
+    }
+
     collectCheesesNearPlayer(playerX, playerY, playerW, playerH);
 }
 
 function drawAll() {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
     canvasContext.drawImage(mazeBackground, 0, 0, canvas.width, canvas.height);
+    colorRect(425, 850, 20, 20, 'black');
     drawCheeses();
     drawCat();
     var activeFrames = ratDirection === 'left' ? ratLeftFrames : ratRightFrames;
@@ -243,5 +253,25 @@ function isBlackPixel(x, y) {
     var b = pixel[2];
     var a = pixel[3];
 
-    return a > 0 && r < 10 && g < 10 && b < 10;
+    return a < 0 && r > 10 && g > 10 && b > 10;
+}
+
+
+
+function ratWin() {
+    stopSound();
+    gameEnded = true;
+    Swal.fire({
+        title: "You escaped!",
+        text: "You collected all the cheeses and escaped the cat!",
+        confirmButtonColor: "#1bad14",
+        confirmButtonText: "Play again",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.reload();
+        }
+    });
 }

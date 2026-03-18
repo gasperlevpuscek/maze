@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", function () {
-    backgroundMusic.volume = 0.2;
+    backgroundMusic.volume = 0.1;
     backgroundMusic.play();
 });
 
@@ -11,17 +11,20 @@ const meow1 = new Audio('sounds/meow1.mp3'),
     meow3 = new Audio('sounds/meow3.mp3');
 
 function cheeseEatSfx() {
-    cheeseEatSound.volume = 0.4;
+    cheeseEatSound.volume = 0.3;
     cheeseEatSound.play();
 }
 
 function nom() {
-    nomnomnom.volume = 0.2
+    nomnomnom.volume = 0.3
     nomnomnom.play();
-
 }
 
 function meowSfx() {
-    meow3.volume = 0.5
+    meow3.volume = 0.4
     meow3.play();
+}
+
+function stopSound() {
+    backgroundMusic.volume = 0.0;
 }

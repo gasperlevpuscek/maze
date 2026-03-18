@@ -45,13 +45,9 @@ function updateCheesePanel() {
     var cheeseWheelIndex;
     var cheesePanelImage;
 
-    if (!cheesePanel) {
-        cheesePanel = document.getElementById('cheeseDiv');
-    }
 
-    if (!cheesePanel) {
-        return;
-    }
+    cheesePanel = document.getElementById('cheeseDiv');
+
 
     collectedCheeseCount = CHEESE_COUNT - cheeses.length;
     cheesePanel.innerHTML = '';
@@ -117,10 +113,6 @@ function drawCheeses() {
 }
 
 function collectCheesesNearPlayer(playerX, playerY, playerW, playerH) {
-    if (cheeses.length === 0) {
-        return;
-    }
-
     var cheeseCountBefore = cheeses.length;
     var playerCenterX = playerX + playerW / 2;
     var playerCenterY = playerY + playerH / 2;
