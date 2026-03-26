@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var gameNameHeading = document.getElementById('gamename');
     gameNameHeading.addEventListener('click', function () {
         Swal.fire({
-            title: 'Cheese Chaser',
+            title: 'Cheese Escape',
             text: 'Author: Gašper Levpušček',
             confirmButtonText: 'ok',
             confirmButtonColor: '#ffe70b',
