@@ -251,7 +251,7 @@ function isBlackPixel(x, y) {
     var b = pixel[2];
     var a = pixel[3];
 
-    return a < 0 && r < 10 && g < 10 && b < 10;
+    return a > 0 && r < 10 && g < 10 && b < 10;
 }
 
 
