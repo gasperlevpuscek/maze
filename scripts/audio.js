@@ -1,6 +1,4 @@
 window.addEventListener("DOMContentLoaded", function () {
-    backgroundMusic.volume = 0.1;
-    backgroundMusic.play();
 });
 
 const backgroundMusic = new Audio('sounds/ratEncounter.mp3');
